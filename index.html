@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora de Pizzas</title><style>
+body{font-family:Arial;background:#f2f2f2;padding:20px}.c{max-width:900px;margin:auto;background:#fff;padding:20px;border-radius:8px}
+table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:8px;text-align:center}
+input{width:90%}button{padding:10px 20px;margin:15px auto;display:block}.best{background:#dff6df}.card{border:1px solid #ccc;padding:10px;margin:10px 0}
+</style></head><body><div class="c"><h1>Calculadora de Pizzas</h1>
+<table><tr><th>Pizza</th><th>Diámetro (cm)</th><th>Cantidad</th><th>Precio unitario</th></tr>
+<tr><td>Pizza 1</td><td><input id='d1' type='number'></td><td><input id='c1' type='number' value='1' min='1'></td><td><input id='u1' type='number'></td></tr><tr><td>Pizza 2</td><td><input id='d2' type='number'></td><td><input id='c2' type='number' value='1' min='1'></td><td><input id='u2' type='number'></td></tr><tr><td>Pizza 3</td><td><input id='d3' type='number'></td><td><input id='c3' type='number' value='1' min='1'></td><td><input id='u3' type='number'></td></tr><tr><td>Pizza 4</td><td><input id='d4' type='number'></td><td><input id='c4' type='number' value='1' min='1'></td><td><input id='u4' type='number'></td></tr><tr><td>Pizza 5</td><td><input id='d5' type='number'></td><td><input id='c5' type='number' value='1' min='1'></td><td><input id='u5' type='number'></td></tr>
+</table><button onclick="calc()">Calcular</button><div id="r"></div>
+<script>
+function calc(){
+let a=[];
+for(let i=1;i<=5;i++){
+ let d=+document.getElementById('d'+i).value,c=+document.getElementById('c'+i).value,u=+document.getElementById('u'+i).value;
+ if(d>0&&c>0&&u>0){
+  let area=Math.PI*(d/2)*(d/2), areaT=area*c, precioT=u*c, pcm2=precioT/areaT;
+  a.push({i,d,c,u,area,areaT,precioT,pcm2});
+ }
+}
+let r=document.getElementById('r');r.innerHTML='';
+if(!a.length){r.textContent='Ingrese al menos una opción.';return;}
+let best=a.reduce((x,y)=>x.pcm2<y.pcm2?x:y);
+a.forEach(x=>{
+ let diff=((x.pcm2-best.pcm2)/best.pcm2*100).toFixed(1);
+ r.innerHTML+=`<div class="${x===best?'card best':'card'}">
+<h3>Pizza ${x.i} ${x===best?'':''}</h3>
+<p>Diámetro: ${x.d} cm</p>
+<p>Cantidad: ${x.c}</p>
+<p>Área de una pizza: ${x.area.toFixed(2)} cm²</p>
+<p>Área total: ${x.areaT.toFixed(2)} cm²</p>
+<p>Precio unitario: $${x.u.toFixed(2)}</p>
+<p>Precio total: $${x.precioT.toFixed(2)}</p>
+<p>Precio por cm²: $${x.pcm2.toFixed(4)}</p>
+<p>${x===best?'Mejor opción':'+'+diff+'% más cara que la mejor opción'}</p></div>`;
+});
+}
+</script></div></body></html>
